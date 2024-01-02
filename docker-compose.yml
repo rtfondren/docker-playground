@@ -3,8 +3,19 @@ services:
     image: postgres:latest
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PWD=postgres
+      - POSTGRES_PASSWORD=postgres
     ports:
       - '5432:5432'
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
 
-
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=postgres@my-app.com
+      - PGADMIN_DEFAULT_PASSWORD=postgres
+      - PGADMIN_DISABLE_POSTFIX=true
+    ports:
+      - '5051:80'
+    volumes:
+      - ./pgadmin4/pgadmin:/var/lib/pgadmin
