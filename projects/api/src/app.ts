@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 
 import { indexRoute } from "./routes/index";
+import { usersRoute } from "./routes/users";
 
 const app: Express = express();
 const port = process.env.PORT || 3001;
@@ -15,7 +16,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRoute);
-// app.use('/users', usersRouter);
+app.use("/users", usersRoute);
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);

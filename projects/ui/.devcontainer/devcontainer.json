@@ -20,7 +20,8 @@
       "extensions": [
         "eamodio.gitlens",
         "esbenp.prettier-vscode",
-        "redhat.vscode-yaml"
+        "redhat.vscode-yaml",
+        "Prisma.prisma"
       ]
     }
   }

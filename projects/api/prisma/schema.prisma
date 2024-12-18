@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Collection {
+  id                  Int                   @id @default(autoincrement())
+  name                String                @default("New Collection")
+  ownerId             Int                   @map("owner_id")
+  user                User                  @relation(fields: [ownerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Collection_user_id_fkey")
+  releases CollectionToRelease[]
+}
+
+model CollectionToRelease {
+  collectionId Int @map("collection_id")
+  releaseId    Int @map("release_id")
+  dateAdded    DateTime   @map("date_added") @default(now()) @db.Timestamp(6)
+  collection    Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  release       Release    @relation(fields: [releaseId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([collectionId, releaseId])
+}
+
+model Release {
+  id                  Int                   @id @default(autoincrement())
+  name                String                @default("New Record")
+  collections CollectionToRelease[]
+  tracks Track[]
+}
+
+model User {
+  id            Int          @id @default(autoincrement())
+  username      String       @unique
+  lastModified DateTime     @map("last_modified") @default(now()) @db.Timestamp(6)
+  collections    Collection[]
+}
+
+model Track {
+  id Int @id @default(autoincrement())
+  name String @default("New Track")
+  releaseDate DateTime?
+  releaseId Int @map("release_id")
+  release       Release    @relation(fields: [releaseId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
